@@ -46,9 +46,12 @@ NB: dialogue_data.json should be in ```graph-generator/``` directory.
 python3 app.py dialogue_data.json --update
 ```
 When ```---update``` is not included, the existing ```graph-generator/svgs``` directory will be deleted
-and recreated with the graphs from the new json. When ```---update``` is included, the existing
-```graph-generator/svgs``` directory will be preserved, and the new graphs will be generated in a separate
-svg folder ```graph-generator/svgs_1```. New dialogues will be shown adjacent to old ones in the html.
+and recreated with the graphs from the new json. 
+
+When ```---update``` is included, the existing ```graph-generator/svgs``` directory will be preserved, 
+and the new graphs will be generated in a separate svg folder ```graph-generator/svgs_1```. 
+
+New dialogues will be shown adjacent to old ones in the html.
 
 
 ```bash
@@ -123,6 +126,9 @@ Note:
 ## Coming soon
 
 WIP: find solution to edus out of order in turns in graphs
+
 WIP: dockerization
+
 WIP: graphing AMI data
+
 WIP: specifying subsets of relation types and colors
