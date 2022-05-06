@@ -28,23 +28,42 @@ The graph_output directory and the svgs directory will be created in the graph-g
 
 ## CLI
 
-To create graphs from dialogue_data.json:
+```bash
+python3 app.py dialogue_data.json [--update][--add_cdu][--monochrome]
+```
+
+Breakdown:
 
 ```bash
 python3 app.py dialogue_data.json
 ```
+Creates graph svgs from dialogue_data.json in ```graph-generator/svgs``` directory, 
+then organizes in html files. Open ```graph-generator/index.html``` to view graphs by dialogue id. 
 
-To include cdus in the graphs:
+NB: dialogue_data.json should be in ```graph-generator/``` directory.
+
+```bash
+python3 app.py dialogue_data.json --update
+```
+When ```---update``` is not included, the existing ```graph-generator/svgs``` directory will be deleted
+and recreated with the graphs from the new json. When ```---update``` is included, the existing
+```graph-generator/svgs``` directory will be preserved, and the new graphs will be generated in a separate
+svg folder ```graph-generator/svgs_1```. New dialogues will be shown adjacent to old ones in the html.
+
 
 ```bash
 python3 app.py dialogue_data.json --add_cdu
 ```
+Includes CDUs in graphs if dialogue_data.json includes CDU information.
 
-To visuzalize attachments only:
+NB: If dialogue_data.json contains relations connecting CDUs and ```--add_cdu``` is not called, then
+there will be an error while generating the graphs.
 
 ```bash
 python3 app.py dialogue_data.json --monochrome
 ```
+Visualizes attachments only, i.e. uses one relation color and does not include attachment types.
+
 
 ## Data format
 
@@ -91,16 +110,19 @@ The following fields are required in the json file input:
 
 Note:
 
--The turn_no field in "edus" will be automatically generated 
+-The "turn_no" field in "edus" will be automatically generated.
 
--If CDUs are not used then the "cdus" field isn't necessary
+-If CDUs are not used then the "cdus" field isn't necessary.
 (Otherwise ```--add_cdu ``` flag is necessary.)
 
 -If relation types aren't needed (i.e. only 1/0 attachments will be visualized), 
- then the "type" field in "relations" isn't necessary
+ then the "type" field in "relations" isn't necessary.
 (Specify with ```--monochrome ``` argument.)
 
 
 ## Coming soon
 
-WIP: update function for graphs
+WIP: find solution to edus out of order in turns in graphs
+WIP: dockerization
+WIP: graphing AMI data
+WIP: specifying subsets of relation types and colors
