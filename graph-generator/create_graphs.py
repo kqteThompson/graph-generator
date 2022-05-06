@@ -60,7 +60,8 @@ def create_dot_object(dialogue_info, dialogue_path, add_cdu, mono):
     dot_object.set_node_defaults(shape='circle', fixedsize='true', style='filled', height=.1, width=.1, fontsize=10)
     dot_object.set_edge_defaults(style='solid', arrowsize=0.5, color='grey', splines='line')
 
-    cluster_main = pydot.Cluster(dialogue_info['dialogue_id'], label= dialogue_info['dialogue_id'], labeljust='l')
+    label = dialogue_info['dialogue_id'].split('_')[-1]
+    cluster_main = pydot.Cluster(dialogue_info['dialogue_id'], label=label, labeljust='l')
 
     max_turns = get_max_turns(dialogue_info['edus'])
     
@@ -158,16 +159,16 @@ def create_dot_object(dialogue_info, dialogue_path, add_cdu, mono):
 
     return
 
-def html_first(svg_folder_path, html_folder_path, collection_name):
+def html_first(svg_folder_path, html_folder_path, title):
     """
     :param svg folder path: path to folder of svgs created using create_dot_object()
-    :param html folder path: path to folder where .html files will created
-    :param collection name: name of the dialogue collection 
+    :param html folder path: path to folder where .html files will be created
+    :param title: name of the dialogue data 
     :return: a folder of .html organizing .svg files to be viewed in the browser
     """
 
     index_html_file = open(html_folder_path + '/' + 'index.html', 'w')
-    index_html_file.write('<html><h2>' + collection_name + '</h2><ul style="list-style: none;">')
+    index_html_file.write('<html><h2>' + title + '</h2><ul style="list-style: none;">')
 
     #for svg in svg folder create html file in html folder and write index file
 
@@ -198,11 +199,52 @@ def html_first(svg_folder_path, html_folder_path, collection_name):
 
     return
 
-def html_compare():
-    ##WIP rewrite html so that it is easier to compare
-    print('function does not exist')
+def html_compare(svg_folder_path, html_folder_path, title, num_dirs):
+    """
+    :param svg_folder_path: path to folder of svgs created using create_dot_object()
+    :param output_path: path to folder where .html files will be created
+    :param title: name of the dialogue data 
+    :param num_dirs: the number of the current svg directory to be created
+    :return: 
+    """
+    index_html_file = open(html_folder_path + '/' + 'index.html', 'w')
+    index_html_file.write('<html><h2>' + title + '</h2><ul style="list-style: none;">')
+
+    #!!create default dict of all the svgs (keys) and a list of svg folder links for each
+
+    svg_list = []
+
+    for svg in os.listdir(svg_folder_path):
+        svg_trim = os.path.split(svg)[-1]
+        svg_list.append(svg_trim)
+
+    svg_list.sort(key = lambda x : int(x.split('_')[0]))
+
+    for svg in svg_list:
+        identifier = svg.split('-')[-1].split('.')[0]
+        svg_file = open(html_folder_path + '/' + identifier + '.html', 'w')
+        svg_file.write('<html><div id =\"wrapper\"style=\"width:100%;\"><div id=\"header\"'
+                'style=\"width:100%;background:grey;z-index:10;text-align:center;\"><h2>' + identifier + '</h2></div>')
+        #write original svg folder
+        svg_file.write('<div style=\"display:inline-block;vertical-align:top;height:100vh;overflow:auto;margin:0 40px 0 20px;padding:0 20px 0 20px;\">')
+        svg_file.write('<div class=\"base\" style=\"display:block\"><object data=\"svgs/' + svg + '\" type =\"image/svg+xml\"></object></div>')
+        svg_file.write('</div>')
+        #write each subsequent folder
+        for num in range(1, num_dirs + 1):
+            svg_file.write('<div style=\"display:inline-block;vertical-align:top;height:100vh;overflow:auto;margin:0 40px 0 20px;padding:0 20px 0 20px;\">')
+            svg_file.write('<div class=\"base\" style=\"display:block\"><object data=\"svgs_' + str(num) + '/' + svg + '\" type =\"image/svg+xml\"></object></div>')
+            svg_file.write('</div>')
+        svg_file.write('</div>')
+        svg_file.write('</html>')
+        svg_file.close()
+        index_html_file.write('<li> <a href=\"' + identifier + '.html' + '\"</a>' + identifier + '</a></li>')
+
+    index_html_file.write('</ul></html>')
+    index_html_file.close()
+
     return 
 
+     
 def write_svgs(data, svg_path, add_cdu=False, mono=False):
     """
     writes dialogue graph svgs to svg folder
@@ -226,7 +268,7 @@ def write_svgs(data, svg_path, add_cdu=False, mono=False):
 def write_html(svg_path, output_path, title, num_dirs):
 
     if num_dirs:
-        html_compare()
+        html_compare(svg_path, output_path, title, num_dirs)
     else:
         html_first(svg_path, output_path, title)
     return
