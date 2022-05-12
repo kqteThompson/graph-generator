@@ -13,7 +13,7 @@ A CLI for generating discourse graphs from json data using the pydot/graphviz li
 ## Getting started
 
 ```bash
-git clone https://github.com/graph-generator.git
+git clone https://github.com/kateThompson/graph-generator.git
 cd graph-generator
 ```
 Make sure the pydot library is installed. 
@@ -52,6 +52,8 @@ When ```---update``` is included, the existing ```graph-generator/svgs``` direct
 and the new graphs will be generated in a separate svg folder ```graph-generator/svgs_1```. 
 
 New dialogues will be shown adjacent to old ones in the html.
+
+NB: in order to create the comparison graphs the graph_generator uses the dialogue_id fields, so the dialogue_ids must be the same across all iterations of the data. 
 
 
 ```bash
