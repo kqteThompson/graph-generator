@@ -13,7 +13,7 @@ A CLI for generating discourse graphs from json data using the pydot/graphviz li
 ## Getting started
 
 ```bash
-git clone https://github.com/kateThompson/graph-generator.git
+git clone https://github.com/kqteThompson/graph-generator.git
 cd graph-generator
 ```
 Make sure the pydot library is installed. 
